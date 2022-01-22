@@ -24,4 +24,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Roman Garanin](https://github.com/EvilKhaosKat) - creator and maintainer
+- [Roman Garanin](https://github.com/romanthekat) - creator and maintainer
