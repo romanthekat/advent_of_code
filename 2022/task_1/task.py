@@ -13,8 +13,21 @@ def solve_first(input: list[str]):
     return max_calories
 
 def solve_second(input):
-    pass
+    elves = []
 
+    calories = 0
+    for line in input:
+        if line == "\n":
+            elves.append(calories)
+            calories = 0
+            continue
+
+        calories += int(line)
+    elves.append(calories)
+
+    elves = sorted(elves, reverse=True)
+
+    return elves[0] + elves[1] + elves[2]
 
 if __name__ == '__main__':
     input = []
@@ -23,4 +36,4 @@ if __name__ == '__main__':
             input.append(line)
 
     print(f"first: {solve_first(input)}")
-    # print(f"second: {solve_second(input)}")
+    print(f"second: {solve_second(input)}")
