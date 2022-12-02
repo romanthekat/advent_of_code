@@ -68,3 +68,8 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# jvm
+gradle/
+.gradle
+build

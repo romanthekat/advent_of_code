@@ -29,6 +29,7 @@ def solve_second(input):
 
     return elves[0] + elves[1] + elves[2]
 
+
 if __name__ == '__main__':
     input = []
     with open("input.txt") as file:
@@ -37,3 +38,4 @@ if __name__ == '__main__':
 
     print(f"first: {solve_first(input)}")
     print(f"second: {solve_second(input)}")
+
