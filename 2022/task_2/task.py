@@ -2,7 +2,7 @@ def solve_first(input: list[str])-> int:
     result = 0
     response2common = {"X": "A", "Y": "B", "Z": "C"}
     play2score = {"A": 1, "B": 2, "C": 3}
-    play2win = {"B": "A", "C": "B", "A": "C"}
+    wins_play = {"B": "A", "C": "B", "A": "C"}
     
     for line in input:
         opp = line[0]
@@ -12,7 +12,7 @@ def solve_first(input: list[str])-> int:
         
         if opp == me:
             result += 3
-        elif play2win[me] == opp:
+        elif opp == wins_play[me]:
             result += 6
         else:
             pass
