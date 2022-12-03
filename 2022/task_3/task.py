@@ -22,7 +22,6 @@ def solve_first(input: list[str]) -> int:
         second = set(second_part)
 
         common = first.intersection(second)
-        print(common)
         for item in common:
             result += item_to_priority(item)
 
@@ -32,12 +31,32 @@ def solve_first(input: list[str]) -> int:
 def solve_second(input: list[str]) -> int:
     result = 0
 
+    group = []
+    for line in input:
+        line = line.rstrip()
+
+        group.append(line)
+
+        if len(group) != 3:
+            continue
+            
+        first = set(group[0])
+        second = set(group[1])
+        third = set(group[2])
+        
+        group = []
+        
+        common = first.intersection(second)
+        common = common.intersection(third)
+        for item in common:
+            result += item_to_priority(item)
+
     return result
 
 
 if __name__ == "__main__":
     input = []
-    with open("input.txt", "r") as f:
+    with open("input_test.txt", "r") as f:
         # with open("input_test.txt", "r") as f:
         input = f.readlines()
 
