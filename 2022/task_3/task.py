@@ -56,7 +56,7 @@ def solve_second(input: list[str]) -> int:
 
 if __name__ == "__main__":
     input = []
-    with open("input_test.txt", "r") as f:
+    with open("input.txt", "r") as f:
         # with open("input_test.txt", "r") as f:
         input = f.readlines()
 
