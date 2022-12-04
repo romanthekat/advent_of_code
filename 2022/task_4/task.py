@@ -18,6 +18,17 @@ def solve_first(input: list[str]) -> int:
 def solve_second(input: list[str]) -> int:
     result = 0
 
+    for line in input:
+        line = line.rstrip()
+        
+        parts = line.split(",")
+        
+        pair1 =[int(n) for n in parts[0].split("-")]
+        pair2 = [int(n) for n in parts[1].split("-")]
+        
+        if (pair1[0] <= pair2[0] <= pair1[1]) or (pair2[0] <= pair1[0] <= pair2[1]):
+            result += 1
+
     return result
 
 
