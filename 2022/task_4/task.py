@@ -33,10 +33,10 @@ def solve_second(input: list[str]) -> int:
 
 
 if __name__ == "__main__":
-    input = []
     input_file = "input.txt"
     # input_file = "input_test.txt"
     
+    input = []
     with open(input_file, "r") as f:
         input = f.readlines()
 
