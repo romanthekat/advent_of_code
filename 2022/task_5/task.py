@@ -33,6 +33,13 @@ def parse_command(command: str) -> Tuple[int, int, int]:
     return int(move), int(crates[0]) - 1, int(crates[1]) - 1
 
 
+def get_result(crates: list[list[str]]) -> str:
+    result = ""
+    for crate in crates:
+        result += crate[-1]
+    return result
+
+
 def solve_first(input: list[str]) -> str:
     crates_input, commands_input = split_input(input) 
     crates = parse_crates(crates_input)
@@ -43,16 +50,22 @@ def solve_first(input: list[str]) -> str:
             crate = crates[start].pop()
             crates[end].append(crate)
     
-    result = ""
-    for crate in crates:
-        result += crate[-1]
-    return result
+    return get_result(crates)
 
 
 def solve_second(input: list[str]) -> str:
-    result = ""
-
-    return result
+    crates_input, commands_input = split_input(input) 
+    crates = parse_crates(crates_input)
+    
+    for command in commands_input:
+        count, start, end = parse_command(command)
+        
+        batch = crates[start][-count:]
+        crates[start] = crates[start][:-count]
+        for crate in batch:
+            crates[end].append(crate)
+    
+    return get_result(crates)
 
 
 if __name__ == "__main__":
