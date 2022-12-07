@@ -21,12 +21,11 @@ class Dir:
         self.size = size
         return size
     
-    def get_name(self) -> str:
-        return self.name
-    
     def get_child(self, name: str):
         return self.children.get(name)
         
+    def get_name(self) -> str:
+        return self.name
 
 class File:
     def __init__(self, name: str, size: int) -> None:
@@ -63,9 +62,7 @@ def parse_commands(input: list[str]) -> Dir:
                 
         else:
             size, filename = line.split(" ")
-            file = File(filename, int(size))
-            
-            current_folder.add(file)
+            current_folder.add(File(filename, int(size)))
     
     return root
 
@@ -86,22 +83,13 @@ def solve_first(input: list[str]) -> int:
            if name != ".." and child.type == "dir":
                folders_to_check.append(child)
  
-    
-    result = 0
-    for folder in folders:
-        result += folder.get_size()
-    
-    return result
-
+    return sum(f.get_size() for f in folders)
 
 def solve_second(input: list[str]) -> int:
     root = parse_commands(input)
     
-    total_size = 70000000
-    need_at_least = 30000000
-    
-    free = total_size - root.get_size()
-    delete_at_least = need_at_least - free
+    free = 70000000 - root.get_size()
+    delete_at_least = 30000000 - free
     
     folder_to_delete = root
     folders_to_check = [root]
@@ -115,7 +103,6 @@ def solve_second(input: list[str]) -> int:
             if name != ".." and child.type == "dir":
                 folders_to_check.append(child)
             
-    
     return folder_to_delete.get_size()
 
 
