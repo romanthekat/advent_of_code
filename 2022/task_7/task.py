@@ -1,7 +1,8 @@
 class Dir:
     def __init__(self, name: str, parent) -> None:
         self.name = name
-        self.children = {"..": parent}
+        self.children = {}
+        self.parent = parent
         self.type = "dir"
         self.size = None
 
@@ -14,8 +15,6 @@ class Dir:
         
         size = 0
         for name, child in self.children.items():
-            if name == "..":
-                continue
             size += child.get_size() 
         
         self.size = size
@@ -46,7 +45,9 @@ def parse_commands(input: list[str]) -> Dir:
     
     for line in input[1:]:
         line = line.rstrip()
-        if line.startswith("$ cd "):
+        if line.startswith("$ cd .."):
+            current_folder = current_folder.parent
+        elif line.startswith("$ cd "):
             target_folder = line.split(" ")[-1]
             current_folder = current_folder.get_child(target_folder) 
         
@@ -78,7 +79,7 @@ def solve_first(input: list[str]) -> int:
             folders.append(folder)
         
         for name, child in folder.children.items():
-           if name != ".." and child.type == "dir":
+           if child.type == "dir":
                folders_to_check.append(child)
  
     return sum(f.get_size() for f in folders)
