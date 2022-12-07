@@ -1,8 +1,8 @@
 class Dir:
     def __init__(self, name: str, parent) -> None:
         self.name = name
-        self.children = {"..": parent}
         self.size = None
+        self.children = {"..": parent}
 
     def add(self, child):
        self.children[child.get_name()] = child 
@@ -40,27 +40,27 @@ class File:
         
 def parse_commands(input: list[str]) -> Dir:
     root = Dir("/", None)
-    current_folder = root
+    current_dir = root
     
     for line in input[1:]:
         line = line.rstrip()
         if line.startswith("$ cd "):
-            target_folder = line.split(" ")[-1]
-            current_folder = current_folder.get_child(target_folder) 
+            target_dir_name = line.split(" ")[-1]
+            current_dir = current_dir.get_child(target_dir_name) 
         
         elif line.startswith("$ ls"):
             continue
             
         elif line.startswith("dir "):
-            param = line.split(" ")[-1]
-            child_folder = current_folder.get_child(param)
-            if not child_folder:
-                child_folder = Dir(param, current_folder)
-                current_folder.add(child_folder)
+            dir_name = line.split(" ")[-1]
+            child_dir = current_dir.get_child(dir_name)
+            if not child_dir:
+                child_dir = Dir(dir_name, current_dir)
+                current_dir.add(child_dir)
                 
         else:
             size, filename = line.split(" ")
-            current_folder.add(File(filename, int(size)))
+            current_dir.add(File(filename, int(size)))
     
     return root
 
@@ -68,18 +68,18 @@ def parse_commands(input: list[str]) -> Dir:
 def solve_first(input: list[str]) -> int:
     root = parse_commands(input)
              
-    folders = []
-    folders_to_check = [root]
-    while folders_to_check:
-        folder = folders_to_check.pop()
-        if folder.get_size() <= 100000:
-            folders.append(folder)
+    dirs = []
+    dirs_to_check = [root]
+    while dirs_to_check:
+        dir = dirs_to_check.pop()
+        if dir.get_size() <= 100000:
+            dirs.append(dir)
         
-        for name, child in folder.children.items():
+        for name, child in dir.children.items():
            if name != ".." and isinstance(child, Dir):
-               folders_to_check.append(child)
+               dirs_to_check.append(child)
  
-    return sum(f.get_size() for f in folders)
+    return sum(f.get_size() for f in dirs)
 
 
 def solve_second(input: list[str]) -> int:
@@ -88,19 +88,19 @@ def solve_second(input: list[str]) -> int:
     free = 70000000 - root.get_size()
     delete_at_least = 30000000 - free
     
-    folder_to_delete = root
-    folders_to_check = [root]
-    while folders_to_check:
-        folder = folders_to_check.pop()
-        size = folder.get_size()
-        if size >= delete_at_least and size <= folder_to_delete.get_size():
-            folder_to_delete = folder
+    dir_to_delete = root
+    dirss_to_check = [root]
+    while dirss_to_check:
+        dir = dirss_to_check.pop()
+        size = dir.get_size()
+        if size >= delete_at_least and size <= dir_to_delete.get_size():
+            dir_to_delete = dir
         
-        for name, child in folder.children.items():
+        for name, child in dir.children.items():
             if name != ".." and isinstance(child, Dir):
-                folders_to_check.append(child)
+                dirss_to_check.append(child)
             
-    return folder_to_delete.get_size()
+    return dir_to_delete.get_size()
 
 
 if __name__ == "__main__":
