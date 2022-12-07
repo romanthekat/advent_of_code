@@ -1,9 +1,7 @@
 class Dir:
     def __init__(self, name: str, parent) -> None:
         self.name = name
-        self.children = {}
-        self.parent = parent
-        self.type = "dir"
+        self.children = {"..": parent}
         self.size = None
 
     def add(self, child):
@@ -15,6 +13,8 @@ class Dir:
         
         size = 0
         for name, child in self.children.items():
+            if name == "..":
+                continue
             size += child.get_size() 
         
         self.size = size
@@ -30,7 +30,6 @@ class File:
     def __init__(self, name: str, size: int) -> None:
         self.name = name
         self.size = size
-        self.type = "file"
 
     def get_size(self) -> int:
         return self.size
@@ -45,9 +44,7 @@ def parse_commands(input: list[str]) -> Dir:
     
     for line in input[1:]:
         line = line.rstrip()
-        if line.startswith("$ cd .."):
-            current_folder = current_folder.parent
-        elif line.startswith("$ cd "):
+        if line.startswith("$ cd "):
             target_folder = line.split(" ")[-1]
             current_folder = current_folder.get_child(target_folder) 
         
@@ -79,7 +76,7 @@ def solve_first(input: list[str]) -> int:
             folders.append(folder)
         
         for name, child in folder.children.items():
-           if child.type == "dir":
+           if name != ".." and isinstance(child, Dir):
                folders_to_check.append(child)
  
     return sum(f.get_size() for f in folders)
@@ -100,7 +97,7 @@ def solve_second(input: list[str]) -> int:
             folder_to_delete = folder
         
         for name, child in folder.children.items():
-            if name != ".." and child.type == "dir":
+            if name != ".." and isinstance(child, Dir):
                 folders_to_check.append(child)
             
     return folder_to_delete.get_size()
