@@ -4,10 +4,7 @@ class Dir:
         self.children = {"..": parent}
         self.type = "dir"
         self.size = None
-    
-    def __str__(self) -> str:
-        return "dir " + self.name
-    
+
     def add(self, child):
        self.children[child.get_name()] = child 
     
@@ -16,9 +13,7 @@ class Dir:
             return self.size
         
         size = 0
-        
         for name, child in self.children.items():
-            # print("object:", self.name, "child:", child)
             if name == "..":
                 continue
             size += child.get_size() 
@@ -38,43 +33,46 @@ class File:
         self.name = name
         self.size = size
         self.type = "file"
-        
-    def __str__(self):
-        print(self.size, self.name)
-    
+
     def get_size(self) -> int:
         return self.size
     
     def get_name(self) -> str:
         return self.name
-        
 
-def solve_first(input: list[str]) -> int:
+        
+def parse_commands(input: list[str]) -> Dir:
     root = Dir("/", None)
     current_folder = root
     
     for line in input[1:]:
         line = line.rstrip()
-        print(line)
         if line.startswith("$ cd "):
             target_folder = line.split(" ")[-1]
             current_folder = current_folder.get_child(target_folder) 
         
         elif line.startswith("$ ls"):
             continue
+            
         elif line.startswith("dir "):
             param = line.split(" ")[-1]
             child_folder = current_folder.get_child(param)
             if not child_folder:
                 child_folder = Dir(param, current_folder)
                 current_folder.add(child_folder)
+                
         else:
             size, filename = line.split(" ")
             file = File(filename, int(size))
             
             current_folder.add(file)
+    
+    return root
+
+
+def solve_first(input: list[str]) -> int:
+    root = parse_commands(input)
              
-    print()
     maximum_size = 100000
     folders = []
     
@@ -97,7 +95,28 @@ def solve_first(input: list[str]) -> int:
 
 
 def solve_second(input: list[str]) -> int:
-    return -1
+    root = parse_commands(input)
+    
+    total_size = 70000000
+    need_at_least = 30000000
+    
+    free = total_size - root.get_size()
+    delete_at_least = need_at_least - free
+    
+    folder_to_delete = root
+    folders_to_check = [root]
+    while folders_to_check:
+        folder = folders_to_check.pop()
+        size = folder.get_size()
+        if size >= delete_at_least and size <= folder_to_delete.get_size():
+            folder_to_delete = folder
+        
+        for name, child in folder.children.items():
+            if name != ".." and child.type == "dir":
+                folders_to_check.append(child)
+            
+    
+    return folder_to_delete.get_size()
 
 
 if __name__ == "__main__":
