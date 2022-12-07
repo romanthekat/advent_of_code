@@ -3,10 +3,10 @@ class Dir:
         self.name = name
         self.size = None
         self.children = {"..": parent}
+        
+    def get_name(self) -> str:
+        return self.name
 
-    def add(self, child):
-       self.children[child.get_name()] = child 
-    
     def get_size(self):
         if self.size:
             return self.size
@@ -20,23 +20,25 @@ class Dir:
         self.size = size
         return size
     
+    def add(self, child):
+        self.children[child.get_name()] = child     
+    
     def get_child(self, name: str):
         return self.children.get(name)
-        
-    def get_name(self) -> str:
-        return self.name
+
 
 class File:
     def __init__(self, name: str, size: int) -> None:
         self.name = name
         self.size = size
 
-    def get_size(self) -> int:
-        return self.size
     
     def get_name(self) -> str:
         return self.name
 
+    def get_size(self) -> int:
+        return self.size
+        
         
 def parse_commands(input: list[str]) -> Dir:
     root = Dir("/", None)
