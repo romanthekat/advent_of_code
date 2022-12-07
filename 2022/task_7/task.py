@@ -70,13 +70,11 @@ def parse_commands(input: list[str]) -> Dir:
 def solve_first(input: list[str]) -> int:
     root = parse_commands(input)
              
-    maximum_size = 100000
     folders = []
-    
     folders_to_check = [root]
     while folders_to_check:
         folder = folders_to_check.pop()
-        if folder.get_size() <= maximum_size:
+        if folder.get_size() <= 100000:
             folders.append(folder)
         
         for name, child in folder.children.items():
@@ -84,6 +82,7 @@ def solve_first(input: list[str]) -> int:
                folders_to_check.append(child)
  
     return sum(f.get_size() for f in folders)
+
 
 def solve_second(input: list[str]) -> int:
     root = parse_commands(input)
