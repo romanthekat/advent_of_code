@@ -50,6 +50,42 @@ def is_visible(grid: list[list[int]], row, col: int) -> bool:
     return False
 
 
+def get_scenic_score(grid: list[list[int]], row, col: int) -> int:
+    height = grid[row][col]
+
+    score = 1
+    
+    visible_trees = 0
+    for check_row in range(row - 1, -1, -1):
+        visible_trees += 1
+        if grid[check_row][col] >= height:
+            break
+    score *= visible_trees
+    
+    visible_trees = 0
+    for check_row in range(row + 1, len(grid)):
+        visible_trees += 1
+        if grid[check_row][col] >= height:
+            break
+    score *= visible_trees
+    
+    visible_trees = 0
+    for check_col in range(col - 1, -1, -1):
+        visible_trees += 1
+        if grid[row][check_col] >= height:
+            break
+    score *= visible_trees
+
+    visible_trees = 0
+    for check_col in range(col + 1, len(grid[0])):
+        visible_trees += 1
+        if grid[row][check_col] >= height:
+            break
+    score *= visible_trees
+
+    return score
+
+
 def solve_first(input: list[str]) -> int:
     grid = parse_input(input)
 
@@ -63,10 +99,16 @@ def solve_first(input: list[str]) -> int:
 
 
 def solve_second(input: list[str]) -> int:
-    return -1
+    grid = parse_input(input)
+
+    max_scenic_score = 0
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            max_scenic_score = max(max_scenic_score, get_scenic_score(grid, row, col))
+
+    return max_scenic_score
 
 
-# 2945 too high
 if __name__ == "__main__":
     input_file = "input.txt"
     # input_file = "input_test.txt"
