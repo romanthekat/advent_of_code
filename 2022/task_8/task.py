@@ -54,21 +54,21 @@ def get_scenic_score(grid: list[list[int]], row, col: int) -> int:
     height = grid[row][col]
 
     score = 1
-    
+
     visible_trees = 0
     for check_row in range(row - 1, -1, -1):
         visible_trees += 1
         if grid[check_row][col] >= height:
             break
     score *= visible_trees
-    
+
     visible_trees = 0
     for check_row in range(row + 1, len(grid)):
         visible_trees += 1
         if grid[check_row][col] >= height:
             break
     score *= visible_trees
-    
+
     visible_trees = 0
     for check_col in range(col - 1, -1, -1):
         visible_trees += 1
